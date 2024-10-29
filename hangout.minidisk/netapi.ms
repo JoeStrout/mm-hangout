@@ -4,19 +4,43 @@
 
 SERVER_URL = "localhost:8000"
 CGI_DIR = "/cgi-bin/"
+DATA_DIR = "/data/"
 
 import "importUtil"
 ensureImport "stringUtil"
+ensureImport "dateTime"
+
+_apiURL = function(api)
+	return SERVER_URL + CGI_DIR + api + ".ms"
+end function
+
+EOL = char(10)		// standard line ending in HTTP
+
+splitLines = function(s)
+	return s.split(EOL)
+end function
 
 // test: check whether the server is running and responding to
 // requests at all.  Should return "OK" and some server details.
 // Returns HTTP error string (e.g. "HTTP/1.1 404 Not Found") in
 // case of failure.
 test = function
-	result = http.get(SERVER_URL + CGI_DIR + "test.ms")
+	result = http.get(_apiURL("test"))
 	return result
 end function
 
+
+// addLine: adds a line of text to a circular file.
+addLine = function(filePath, lineOfText)
+	lineOfText = lineOfText.replace(char(13), "\n")
+	lineOfText = lineOfText.replace(char(10), "\n")
+	data = {}
+	data.file = filePath
+	data.line = lineOfText
+	pprint data
+	result = http.post(_apiURL("addLine"), data)
+	return result
+end function
 
 if locals == globals then
 	print "Calling: test"
@@ -26,6 +50,8 @@ if locals == globals then
 	end if
 	print result
 	
-	
+	print "Calling: addLine (to file 'test')"
+	result = addLine("test", "Test line at " + dateTime.now)
+	print result
 	
 end if
