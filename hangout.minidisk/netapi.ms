@@ -45,7 +45,8 @@ end function
 getLines = function(filename, firstLineNum)
 	url = _apiURL("getLines") + "?file=" + filename + "&lineNum=" + firstLineNum
 	result = http.get(url)
-	return result
+	if not result then return []
+	return result.split(EOL)
 end function
 
 if locals == globals then
