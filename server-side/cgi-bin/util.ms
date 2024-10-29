@@ -42,7 +42,9 @@ globals.parseQueryString = function(qs)
 		if kv.len == 1 then
 			result[kv[0].urlDecode] = true
 		else
-			result[kv[0].urlDecode] = kv[1].urlDecode
+			value = kv[1].urlDecode
+			if value.isNumeric then value = val(value)
+			result[kv[0].urlDecode] = value
 		end if
 	end for
 	return result
@@ -60,4 +62,9 @@ end function
 globals.readPostData = function
 	return parseQueryString(getRawPostData)
 end function
+
+globals.getQueryParams = function
+	return parseQueryString(env.QUERY_STRING)
+end function
+
 

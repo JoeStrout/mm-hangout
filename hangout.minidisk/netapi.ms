@@ -4,7 +4,6 @@
 
 SERVER_URL = "localhost:8000"
 CGI_DIR = "/cgi-bin/"
-DATA_DIR = "/data/"
 
 import "importUtil"
 ensureImport "stringUtil"
@@ -31,14 +30,21 @@ end function
 
 
 // addLine: adds a line of text to a circular file.
-addLine = function(filePath, lineOfText)
+addLine = function(filename, lineOfText)
 	lineOfText = lineOfText.replace(char(13), "\n")
 	lineOfText = lineOfText.replace(char(10), "\n")
 	data = {}
-	data.file = filePath
+	data.file = filename
 	data.line = lineOfText
 	pprint data
 	result = http.post(_apiURL("addLine"), data)
+	return result
+end function
+
+// getLines: gets all lines at or after a given line number.
+getLines = function(filename, firstLineNum)
+	url = _apiURL("getLines") + "?file=" + filename + "&lineNum=" + firstLineNum
+	result = http.get(url)
 	return result
 end function
 
@@ -54,4 +60,7 @@ if locals == globals then
 	result = addLine("test", "Test line at " + dateTime.now)
 	print result
 	
+	print "Calling: getLines (file 'test' from line 0)"
+	result = getLines("test", 0)
+	print result
 end if

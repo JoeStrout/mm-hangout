@@ -1,10 +1,18 @@
 #!/usr/bin/env miniscript
 
+// API to append a line to a (circular) file.  Note that line
+// number and timestamp are automatically added.
+// Post parameters:
+//
+//	file: name of file to add to
+//	line: line of text (no tabs/line breaks, ASCII only for now)
+
 import "stringUtil"
 import "util"
 import "dateTime"
 
-// How many lines we allow per file (total number of lines is twice this):
+// How many lines we allow per file.
+// (Total number of lines is up to twice this value.)
 LINE_LIMIT = 5
 
 print "Content-type: text/plain"
