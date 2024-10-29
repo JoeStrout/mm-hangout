@@ -1,6 +1,6 @@
 // Various utility functions and constants useful for all the API scripts.
 
-globals.FILE_DIR = "../data/"
+globals.FILE_DIR = "data/"
 globals.TAB = char(9)
 globals.EOL = char(10)
 

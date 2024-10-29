@@ -2,8 +2,13 @@
 // the server, and wraps them in a nice interface that hopefully
 // hides most of the hairy details.
 
+// For local testing:
 SERVER_URL = "localhost:8000"
 CGI_DIR = "/cgi-bin/"
+
+// For deployed server on miniscript.org:
+SERVER_URL = "miniscript.org"
+CGI_DIR = "/hangout/"
 
 import "importUtil"
 ensureImport "stringUtil"
@@ -36,7 +41,6 @@ addLine = function(filename, lineOfText)
 	data = {}
 	data.file = filename
 	data.line = lineOfText
-	pprint data
 	result = http.post(_apiURL("addLine"), data)
 	return result
 end function
